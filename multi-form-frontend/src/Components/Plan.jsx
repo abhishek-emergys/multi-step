@@ -6,8 +6,6 @@ const Plan = ({ planError }) => {
   const isChecked = formData.isChecked;
   const selectedPlan = formData.planInfo.selectedPlan;
 
-  console.log(formData);
-
   const [priceDetails, setPriceDetails] = useState({
     arcade: {
       plan: "Arcade",
@@ -33,13 +31,10 @@ const Plan = ({ planError }) => {
 
     if (selectedPlan) {
       const currentPrice = priceDetails[selectedPlan];
-      console.log("currentPrice  ", currentPrice);
 
       const updatedPrice = newIsChecked
         ? currentPrice.yearlyPrice
         : currentPrice.price;
-
-      console.log("updatedPrice ", updatedPrice);
 
       setFormData((prevData) => ({
         ...prevData,
@@ -67,7 +62,7 @@ const Plan = ({ planError }) => {
   return (
     <div className="personal-info" id="main-plan">
       <div className="personal-info-main">
-        <h1 className="personal-info-h1">Select your plan</h1>
+        <h2 className="personal-info-h1">Select your plan</h2>
         <p className="personal-info-p">
           You have the option of monthly or yearly billing.
         </p>
@@ -162,7 +157,13 @@ const Plan = ({ planError }) => {
 
       <div className="month-year-btn">
         <div>
-          <span>Monthly</span>
+          <span
+            className={
+              isChecked ? "month-year-btn-text" : "month-year-btn-text-bold"
+            }
+          >
+            Monthly
+          </span>
         </div>
         <div>
           <label className="switch">
@@ -176,7 +177,13 @@ const Plan = ({ planError }) => {
           </label>
         </div>
         <div>
-          <span>Yearly</span>
+          <span
+            className={
+              isChecked ? "month-year-btn-text-bold" : "month-year-btn-text"
+            }
+          >
+            Yearly
+          </span>
         </div>
       </div>
       <label className="plan-error">{planError}</label>

@@ -63,7 +63,6 @@ const Home = () => {
     } else {
       setPhoneError("");
     }
-
     return !hasError;
   };
 
@@ -76,11 +75,26 @@ const Home = () => {
 
     if (currentTab === 2 && !formData.planInfo.selectedPlan) {
       setPlanError("Please select your plan");
-      console.log(planError);
-
       return;
     }
     setPlanError("");
+
+    if (currentTab === 4) {
+      setFormData({
+        isChecked: false,
+        currentTab: 1,
+        userInfo: {
+          name: "",
+          email: "",
+          phone: "",
+        },
+        planInfo: {
+          selectedPlan: null,
+          selectedPrice: "",
+        },
+        addons: [],
+      });
+    }
 
     if (currentTab < 5) {
       setCurrentTab(currentTab + 1);
@@ -98,13 +112,20 @@ const Home = () => {
     <div className="main">
       <div className="container">
         <div className="step-1">
-          <Sidebar currentTab={currentTab} setCurrentTab={setCurrentTab} />
+          <Sidebar
+            currentTab={currentTab}
+            setPlanError={setPlanError}
+            setCurrentTab={setCurrentTab}
+            validateInputs={validateInputs}
+          />
           <div>
             {
               {
                 1: (
                   <Info
                     nameError={nameError}
+                    handleNext={handleNext}
+                    validateInputs={validateInputs}
                     emailError={emailError}
                     phoneError={phoneError}
                   />

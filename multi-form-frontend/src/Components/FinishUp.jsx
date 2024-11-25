@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { UserInfo } from "../App";
 
-const FinishUp = ({currentTab, setCurrentTab}) => {
+const FinishUp = ({ currentTab, setCurrentTab }) => {
   const { formData, setFormData } = useContext(UserInfo);
   const [loading, setLoading] = useState(true);
   const addons = formData.addons || [];
@@ -28,7 +28,7 @@ const FinishUp = ({currentTab, setCurrentTab}) => {
     } else {
       setLoading(false);
     }
-  }, [addons]);
+  }, []);
 
   const validAddons = addons.filter((addon) => addon?.plan && addon?.price);
 
@@ -46,7 +46,7 @@ const FinishUp = ({currentTab, setCurrentTab}) => {
     <div>
       <div className="personal-info">
         <div className="personal-info-main">
-          <h1 className="personal-info-h1">Finishing up</h1>
+          <h2 className="personal-info-h1">Finishing up</h2>
           <p className="personal-info-p">
             Double-check everything looks OK before confirming.
           </p>
@@ -54,7 +54,7 @@ const FinishUp = ({currentTab, setCurrentTab}) => {
         <div className="personal-info-form">
           <div className="final-section">
             <div className="change-tab">
-              <div>
+              <div className="change-tab-main">
                 <span className="change-tab-title" id="change-tab-title">
                   {updatedTitle} {isChecked ? "(Yearly)" : "(Monthly)"}
                 </span>
@@ -94,7 +94,7 @@ const FinishUp = ({currentTab, setCurrentTab}) => {
                 </div>
               ))
             ) : (
-              <div className="no-data">No Addons Selected</div>
+              <div className="no-data">No Addons Added</div>
             )}
           </div>
 

@@ -1,6 +1,52 @@
-const Sidebar = ({ currentTab, setCurrentTab }) => {
+import { useContext } from "react";
+import { UserInfo } from "../App";
+
+const Sidebar = ({
+  currentTab,
+  setCurrentTab,
+  validateInputs,
+  setPlanError,
+}) => {
+  const { formData, setFormData } = useContext(UserInfo);
+
   const getNumClass = (step) => {
     return currentTab === step ? "num-1" : "num-2";
+  };
+
+  const checkNextStep = (tab) => {
+    switch (tab) {
+      case 1:
+        setCurrentTab(1);
+        break;
+      case 2:
+        if (!validateInputs()) {
+          return;
+        } else {
+          setCurrentTab(tab);
+        }
+        break;
+      case 3:
+        if (!formData.planInfo.selectedPlan) {
+          setPlanError("Please select your plan");
+          return;
+        } else {
+          setCurrentTab(tab);
+          setPlanError("");
+        }
+        break;
+
+      case 4:
+        if (!validateInputs() || !formData.planInfo.selectedPlan) {
+          return;
+        } else {
+          setCurrentTab(tab);
+          setPlanError("");
+        }
+        break;
+
+      default:
+        setCurrentTab(tab);
+    }
   };
 
   return (
@@ -11,7 +57,7 @@ const Sidebar = ({ currentTab, setCurrentTab }) => {
             <div
               className={getNumClass(1)}
               onClick={() => {
-                setCurrentTab(1);
+                checkNextStep(1);
               }}
               id="num-1"
             >
@@ -27,7 +73,7 @@ const Sidebar = ({ currentTab, setCurrentTab }) => {
             <div
               className={getNumClass(2)}
               onClick={() => {
-                setCurrentTab(2);
+                checkNextStep(2);
               }}
               id="num-2"
             >
@@ -43,7 +89,7 @@ const Sidebar = ({ currentTab, setCurrentTab }) => {
             <div
               className={getNumClass(3)}
               onClick={() => {
-                setCurrentTab(3);
+                checkNextStep(3);
               }}
               id="num-3"
             >
@@ -59,7 +105,7 @@ const Sidebar = ({ currentTab, setCurrentTab }) => {
             <div
               className={getNumClass(4)}
               onClick={() => {
-                setCurrentTab(4);
+                checkNextStep(4);
               }}
               id="num-4"
             >

@@ -35,7 +35,7 @@ const Addons = () => {
       ...prevData,
       addons: updatedAddons,
     }));
-  }, [isChecked, addonsDetails, formData.addons, setFormData]);
+  }, [isChecked, addonsDetails]);
 
   const updateAddons = (addonPlan, checked) => {
     const addonPrice = isChecked
@@ -55,8 +55,6 @@ const Addons = () => {
   };
 
   const selectCard = (addonPlan) => {
-    console.log(formData);
-
     const isAddonSelected = formData.addons.some(
       (addon) => addon.plan === addonPlan
     );
@@ -67,7 +65,7 @@ const Addons = () => {
   return (
     <div className="personal-info">
       <div className="personal-info-main">
-        <h1 className="personal-info-h1">Pick add-ons</h1>
+        <h2 className="personal-info-h1">Pick add-ons</h2>
         <p className="personal-info-p">
           Add-ons help enhance your gaming experience.
         </p>

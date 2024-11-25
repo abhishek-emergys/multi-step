@@ -7,7 +7,7 @@ const ThankYou = () => {
             <img src="src/assets/icon-thank-you.svg" />
           </div>
           <div className="thank-you-msg">
-            <h1>Thank You!</h1>
+            <h2>Thank You!</h2>
             <span>
               Thanks for confirming your subscription!We hope you have fun using
               our platform. If you ever need support, please feel free to email
