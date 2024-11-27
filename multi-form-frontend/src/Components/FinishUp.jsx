@@ -17,6 +17,24 @@ const FinishUp = ({ currentTab, setCurrentTab }) => {
     custom: "Customizable Profile",
   };
 
+  const addonsDetails = {
+    online: {
+      plan: "Online service",
+      price: "1/mo",
+      yearlyPrice: "10/yr",
+    },
+    large: {
+      plan: "Large storage",
+      price: "2/mo",
+      yearlyPrice: "20/yr",
+    },
+    custom: {
+      plan: "Customizable profile",
+      price: "2/mo",
+      yearlyPrice: "20/yr",
+    },
+  };
+
   useEffect(() => {
     if (addons.length > 0) {
       addons.sort((a, b) => {
@@ -29,6 +47,20 @@ const FinishUp = ({ currentTab, setCurrentTab }) => {
       setLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    const updatedAddons = formData.addons.map((addon) => {
+      const addonPrice = isChecked
+        ? addonsDetails[addon.plan].yearlyPrice
+        : addonsDetails[addon.plan].price;
+      return { ...addon, price: addonPrice };
+    });
+
+    setFormData((prevData) => ({
+      ...prevData,
+      addons: updatedAddons,
+    }));
+  }, [isChecked]);
 
   const validAddons = addons.filter((addon) => addon?.plan && addon?.price);
 

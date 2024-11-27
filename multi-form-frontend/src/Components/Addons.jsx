@@ -5,7 +5,7 @@ const Addons = () => {
   const { formData, setFormData } = useContext(UserInfo);
   const isChecked = formData.isChecked;
 
-  const [addonsDetails, setAddonsDetails] = useState({
+  const addonsDetails = {
     online: {
       plan: "Online service",
       price: "1/mo",
@@ -21,7 +21,7 @@ const Addons = () => {
       price: "2/mo",
       yearlyPrice: "20/yr",
     },
-  });
+  };
 
   useEffect(() => {
     const updatedAddons = formData.addons.map((addon) => {
@@ -35,7 +35,7 @@ const Addons = () => {
       ...prevData,
       addons: updatedAddons,
     }));
-  }, [isChecked, addonsDetails]);
+  }, [isChecked]);
 
   const updateAddons = (addonPlan, checked) => {
     const addonPrice = isChecked

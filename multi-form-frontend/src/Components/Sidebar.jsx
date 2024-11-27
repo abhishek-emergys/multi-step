@@ -17,6 +17,7 @@ const Sidebar = ({
     switch (tab) {
       case 1:
         setCurrentTab(1);
+        setPlanError("");
         break;
       case 2:
         if (!validateInputs()) {

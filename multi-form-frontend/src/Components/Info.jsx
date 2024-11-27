@@ -8,15 +8,38 @@ const Info = ({ nameError, emailError, phoneError, validateInputs }) => {
   const [email, setEmail] = useState(formData.userInfo.email);
   const [phone, setPhone] = useState(formData.userInfo.phone);
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    const checkData = setTimeout(() => {
-      validateInputs();
-    }, 1000);
+  // const handleChange = (e) => {
+  //   console.log("e ", e.target);
 
-    if (id === "username") setName(value);
-    if (id === "email") setEmail(value);
-    if (id === "phone") setPhone(value);
+  //   const { id, value } = e.target;
+  //   const checkData = setTimeout(() => {
+  //     validateInputs(id);
+  //   }, 100);
+
+  //   if (id === "username") setName(value);
+  //   if (id === "email") setEmail(value);
+  //   if (id === "phone") setPhone(value);
+
+  //   return () => clearTimeout(checkData);
+  // };
+
+  const handleName = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleEmail = (e) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePhone = (e) => {
+    setPhone(e.target.value);
+  };
+
+  const handleOnBlur = (e) => {
+    const { id } = e.target;
+    const checkData = setTimeout(() => {
+      validateInputs(id);
+    }, 100);
 
     return () => clearTimeout(checkData);
   };
@@ -43,7 +66,8 @@ const Info = ({ nameError, emailError, phoneError, validateInputs }) => {
           className={nameError ? "input invalid" : "input"}
           type="text"
           value={name}
-          onChange={handleChange}
+          onChange={handleName}
+          onBlur={handleOnBlur}
           id="username"
           placeholder="e.g. Stephen King"
           autoComplete="off"
@@ -57,7 +81,8 @@ const Info = ({ nameError, emailError, phoneError, validateInputs }) => {
           type="email"
           id="email"
           value={email}
-          onChange={handleChange}
+          onChange={handleEmail}
+          onBlur={handleOnBlur}
           placeholder="e.g. stephenking@lorem.com"
           autoComplete="off"
         />
@@ -70,7 +95,8 @@ const Info = ({ nameError, emailError, phoneError, validateInputs }) => {
           type="number"
           id="phone"
           value={phone}
-          onChange={handleChange}
+          onChange={handlePhone}
+          onBlur={handleOnBlur}
           placeholder="e.g. +1 234 567 890"
           autoComplete="off"
         />

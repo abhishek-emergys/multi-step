@@ -4,12 +4,18 @@ import Addons from "./Addons";
 import FinishUp from "./FinishUp";
 import Sidebar from "./Sidebar";
 import ThankYou from "./ThankYou";
-import { useContext, useState } from "react";
+import { useContext, useState, useMemo, useEffect } from "react";
 import { UserInfo } from "../App";
 
 const Home = () => {
   const { formData, setFormData } = useContext(UserInfo);
-  const [currentTab, setCurrentTab] = useState(formData.currentTab);
+
+  const [currentTab, setCurrentTab] = useState(
+    localStorage.getItem("currentTab")
+      ? Number(localStorage.getItem("currentTab"))
+      : formData.currentTab
+  );
+
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -31,42 +37,88 @@ const Home = () => {
     return namePattern.test(str);
   };
 
-  const validateInputs = () => {
-    let hasError = false;
+  const validateInputs = (id) => {
+    if (id === undefined) {
+      let hasError = false;
 
-    if (!userInfo.name.trim()) {
-      setNameError("This field is required");
-      hasError = true;
-    } else if (!checkName(userInfo.name.trim())) {
-      setNameError("Invalid name");
-      hasError = true;
-    } else {
-      setNameError("");
+      if (!userInfo.name.trim()) {
+        setNameError("This field is required");
+        hasError = true;
+      } else if (!checkName(userInfo.name.trim())) {
+        setNameError("Invalid name");
+        hasError = true;
+      } else {
+        setNameError("");
+      }
+
+      if (!userInfo.email.trim()) {
+        setEmailError("This field is required");
+        hasError = true;
+      } else if (!checkMail(userInfo.email)) {
+        setEmailError("Invalid email");
+        hasError = true;
+      } else {
+        setEmailError("");
+      }
+
+      if (!userInfo.phone.length) {
+        setPhoneError("This field is required");
+        hasError = true;
+      } else if (!checkPhone(userInfo.phone)) {
+        setPhoneError("Invalid phone");
+        hasError = true;
+      } else {
+        setPhoneError("");
+      }
+      return !hasError;
     }
 
-    if (!userInfo.email.trim()) {
-      setEmailError("This field is required");
-      hasError = true;
-    } else if (!checkMail(userInfo.email)) {
-      setEmailError("Invalid email");
-      hasError = true;
-    } else {
-      setEmailError("");
+    if (id === "username") {
+      let hasError = false;
+      if (!userInfo.name.trim()) {
+        setNameError("This field is required");
+        hasError = true;
+      } else if (!checkName(userInfo.name.trim())) {
+        setNameError("Invalid name");
+        hasError = true;
+      } else {
+        setNameError("");
+      }
+      return !hasError;
     }
 
-    if (!userInfo.phone.length) {
-      setPhoneError("This field is required");
-      hasError = true;
-    } else if (!checkPhone(userInfo.phone)) {
-      setPhoneError("Invalid phone");
-      hasError = true;
-    } else {
-      setPhoneError("");
+    if (id === "email") {
+      let hasError = false;
+      if (!userInfo.email.trim()) {
+        setEmailError("This field is required");
+        hasError = true;
+      } else if (!checkMail(userInfo.email)) {
+        setEmailError("Invalid email");
+        hasError = true;
+      } else {
+        setEmailError("");
+      }
+      return !hasError;
     }
-    return !hasError;
+
+    if (id === "phone") {
+      let hasError = false;
+      if (!userInfo.phone) {
+        setPhoneError("This field is required");
+        hasError = true;
+      } else if (!checkPhone(userInfo.phone)) {
+        setPhoneError("Invalid phone");
+        hasError = true;
+      } else if(userInfo.phone.length >= 10 && userInfo.phone.length <= 12){
+        setPhoneError("");
+      }
+      return !hasError;
+    }
   };
 
   const handleNext = (e) => {
+    console.log("currentTab next", currentTab);
+    
     e.preventDefault();
 
     if (!validateInputs()) {
@@ -78,6 +130,7 @@ const Home = () => {
       return;
     }
     setPlanError("");
+console.log("currentTab ", currentTab);
 
     if (currentTab === 4) {
       setFormData({
@@ -96,7 +149,7 @@ const Home = () => {
       });
     }
 
-    if (currentTab < 5) {
+    if (currentTab <= 4) {
       setCurrentTab(currentTab + 1);
     }
   };
@@ -107,6 +160,45 @@ const Home = () => {
       setCurrentTab(currentTab - 1);
     }
   };
+
+  const renderStep = useMemo(() => {
+    switch (currentTab) {
+      case 1:
+        return (
+          <Info
+            nameError={nameError}
+            handleNext={handleNext}
+            validateInputs={validateInputs}
+            emailError={emailError}
+            phoneError={phoneError}
+          />
+        );
+      case 2:
+        return <Plan planError={planError} />;
+      case 3:
+        return <Addons />;
+      case 4:
+        return (
+          <FinishUp currentTab={currentTab} setCurrentTab={setCurrentTab} />
+        );
+      case 5:
+        return <ThankYou />;
+      default:
+        return null;
+    }
+  }, [
+    currentTab,
+    nameError,
+    emailError,
+    phoneError,
+    planError,
+    handleNext,
+    validateInputs,
+  ]);
+
+  useEffect(() => {
+    localStorage.setItem("currentTab", currentTab);
+  }, [currentTab]);
 
   return (
     <div className="main">
@@ -119,28 +211,7 @@ const Home = () => {
             validateInputs={validateInputs}
           />
           <div>
-            {
-              {
-                1: (
-                  <Info
-                    nameError={nameError}
-                    handleNext={handleNext}
-                    validateInputs={validateInputs}
-                    emailError={emailError}
-                    phoneError={phoneError}
-                  />
-                ),
-                2: <Plan planError={planError} />,
-                3: <Addons />,
-                4: (
-                  <FinishUp
-                    currentTab={currentTab}
-                    setCurrentTab={setCurrentTab}
-                  />
-                ),
-                5: <ThankYou />,
-              }[currentTab]
-            }
+            {renderStep}
             <div
               className="btn"
               style={{ display: currentTab === 5 ? "none" : "flex" }}
